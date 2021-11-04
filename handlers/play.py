@@ -48,7 +48,7 @@ def cb_admin_check(func: Callable) -> Callable:
         if cb.from_user.id in admemes:
             return await func(client, cb)
         else:
-            await cb.answer("💡 only admin can tap this button !", show_alert=True)
+            await cb.answer("💡 Admin Only can tap this button !", show_alert=True)
             return
 
     return decorator
@@ -112,23 +112,12 @@ async def generate_cover(title, thumbnail, ctitle):
 )
 async def playlist(client, message):
 
-    keyboard = InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton("• Gʀᴏᴜᴘ", url=f"https://t.me/{GROUP_SUPPORT}"),
-                InlineKeyboardButton(
-                    "• Cʜᴀɴɴᴇʟ", url=f"https://t.me/{UPDATES_CHANNEL}"
-                ),
-            ]
-        ]
-    )
-
     global que
     if message.chat.id in DISABLED_GROUPS:
         return
     queue = que.get(message.chat.id)
     if not queue:
-        await message.reply_text("❌ **no music is currently playing**")
+        await message.reply_text("❌ **No Music currently playing**")
     temp = []
     for t in queue:
         temp.append(t)
@@ -178,7 +167,7 @@ def r_ply(type_):
                 InlineKeyboardButton("⏭", "skip"),
             ],
             [
-                InlineKeyboardButton("📖 PLAY-LIST", "playlist"),
+                InlineKeyboardButton("📖 PLAYLIST", "playlist"),
             ],
             [InlineKeyboardButton("🗑 Close", "cls")],
         ]
@@ -254,18 +243,6 @@ async def music_onoff(_, message):
 @Client.on_callback_query(filters.regex(pattern=r"^(playlist)$"))
 async def p_cb(b, cb):
 
-    keyboard = InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton("• Gʀᴏᴜᴘ", url=f"https://t.me/{GROUP_SUPPORT}"),
-                InlineKeyboardButton(
-                    "• Cʜᴀɴɴᴇʟ", url=f"https://t.me/{UPDATES_CHANNEL}"
-                ),
-            ],
-            [InlineKeyboardButton("🔙 Go Back", callback_data="menu")],
-        ]
-    )
-
     global que
     que.get(cb.message.chat.id)
     type_ = cb.matches[0].group(1)
@@ -301,18 +278,6 @@ async def p_cb(b, cb):
 )
 @cb_admin_check
 async def m_cb(b, cb):
-
-    keyboard = InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton("• Gʀᴏᴜᴘ", url=f"https://t.me/{GROUP_SUPPORT}"),
-                InlineKeyboardButton(
-                    "• Cʜᴀɴɴᴇʟ", url=f"https://t.me/{UPDATES_CHANNEL}"
-                ),
-            ],
-            [InlineKeyboardButton("🔙 Go Back", callback_data="menu")],
-        ]
-    )
 
     global que
     if (
@@ -360,7 +325,7 @@ async def m_cb(b, cb):
     elif type_ == "playlist":
         queue = que.get(cb.message.chat.id)
         if not queue:
-            await cb.message.edit("❌ **no music is currently playing**")
+            await cb.message.edit("❌ **No Music currently playing**")
         temp = []
         for t in queue:
             temp.append(t)
@@ -419,7 +384,7 @@ async def m_cb(b, cb):
                     InlineKeyboardButton("⏭", "skip"),
                 ],
                 [
-                    InlineKeyboardButton("📖 PLAY-LIST", "playlist"),
+                    InlineKeyboardButton("📖 PLAYLIST", "playlist"),
                 ],
                 [InlineKeyboardButton("🗑 Close", "cls")],
             ]
@@ -576,12 +541,7 @@ async def play(_, message: Message):
                 [
                     InlineKeyboardButton("• Mᴇɴᴜ", callback_data="menu"),
                     InlineKeyboardButton("• Cʟᴏsᴇ", callback_data="cls"),
-                ],
-                [
-                    InlineKeyboardButton(
-                        "• Cʜᴀɴɴᴇʟ", url=f"https://t.me/{UPDATES_CHANNEL}"
-                    )
-                ],
+                ]
             ]
         )
         file_name = get_file_name(audio)
@@ -599,7 +559,7 @@ async def play(_, message: Message):
     elif urls:
         query = toxt
         await lel.edit("🔎 **searching...**")
-        ydl_opts = {"format": "bestaudio[ext=m4a]"}
+        ydl_opts = {"format": "bestaudio"}
         try:
             results = YoutubeSearch(query, max_results=1).to_dict()
             url = f"https://youtube.com{results[0]['url_suffix']}"
@@ -625,13 +585,8 @@ async def play(_, message: Message):
             [
                 [
                     InlineKeyboardButton("• Mᴇɴᴜ", callback_data="menu"),
-                    InlineKeyboardButton("• Cʟᴏsᴇ", callback_data="cls"),
-                ],
-                [
-                    InlineKeyboardButton(
-                        "• Cʜᴀɴɴᴇʟ", url=f"https://t.me/{UPDATES_CHANNEL}"
-                    )
-                ],
+                    InlineKeyboardButton("• Cʟᴏsᴇ", callback_data="cls"),    
+                ]
             ]
         )
         message.from_user.first_name
@@ -654,31 +609,31 @@ async def play(_, message: Message):
             toxxt = "\n"
             j = 0
             user = user_name
-            emojilist = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"]
+            emojilist = ["1", "2", "3", "4", "5"]
             while j < 5:
                 toxxt += f"{emojilist[j]} [{results[j]['title'][:25]}...](https://youtube.com{results[j]['url_suffix']})\n"
                 toxxt += f" ├ 💡 **Duration** - `{results[j]['duration']}`\n"
-                toxxt += f" └ ⚡ __Powered by {BOT_NAME}__\n\n"
+                toxxt += f" └ ⚡ __Powered by @zxcskyy__\n\n"
                 j += 1
             keyboard = InlineKeyboardMarkup(
                 [
                     [
                         InlineKeyboardButton(
-                            "1️⃣", callback_data=f"plll 0|{query}|{user_id}"
+                            "1", callback_data=f"plll 0|{query}|{user_id}"
                         ),
                         InlineKeyboardButton(
-                            "2️⃣", callback_data=f"plll 1|{query}|{user_id}"
+                            "2", callback_data=f"plll 1|{query}|{user_id}"
                         ),
                         InlineKeyboardButton(
-                            "3️⃣", callback_data=f"plll 2|{query}|{user_id}"
+                            "3", callback_data=f"plll 2|{query}|{user_id}"
                         ),
                     ],
                     [
                         InlineKeyboardButton(
-                            "4️⃣", callback_data=f"plll 3|{query}|{user_id}"
+                            "4", callback_data=f"plll 3|{query}|{user_id}"
                         ),
                         InlineKeyboardButton(
-                            "5️⃣", callback_data=f"plll 4|{query}|{user_id}"
+                            "5", callback_data=f"plll 4|{query}|{user_id}"
                         ),
                     ],
                     [InlineKeyboardButton(text="🗑 Close", callback_data="cls")],
@@ -721,12 +676,7 @@ async def play(_, message: Message):
                     [
                         InlineKeyboardButton("• Mᴇɴᴜ", callback_data="menu"),
                         InlineKeyboardButton("• Cʟᴏsᴇ", callback_data="cls"),
-                    ],
-                    [
-                        InlineKeyboardButton(
-                            "• Cʜᴀɴɴᴇʟ", url=f"https://t.me/{UPDATES_CHANNEL}"
-                        )
-                    ],
+                    ]
                 ]
             )
             message.from_user.first_name
@@ -843,8 +793,7 @@ async def lol_cb(b, cb):
             [
                 InlineKeyboardButton("• Mᴇɴᴜ", callback_data="menu"),
                 InlineKeyboardButton("• Cʟᴏsᴇ", callback_data="cls"),
-            ],
-            [InlineKeyboardButton("• Cʜᴀɴɴᴇʟ", url=f"https://t.me/{UPDATES_CHANNEL}")],
+            ]
         ]
     )
     await generate_cover(title, thumbnail, ctitle)
@@ -963,7 +912,7 @@ async def ytplay(_, message: Message):
         query += " " + str(i)
     print(query)
     await lel.edit("🔄 **connecting to vc...**")
-    ydl_opts = {"format": "bestaudio[ext=m4a]"}
+    ydl_opts = {"format": "bestaudio"}
     try:
         results = YoutubeSearch(query, max_results=1).to_dict()
         url = f"https://youtube.com{results[0]['url_suffix']}"
@@ -1003,8 +952,7 @@ async def ytplay(_, message: Message):
             [
                 InlineKeyboardButton("• Mᴇɴᴜ", callback_data="menu"),
                 InlineKeyboardButton("• Cʟᴏsᴇ", callback_data="cls"),
-            ],
-            [InlineKeyboardButton("• Cʜᴀɴɴᴇʟ", url=f"https://t.me/{UPDATES_CHANNEL}")],
+            ]
         ]
     )
     await generate_cover(title, thumbnail, ctitle)
